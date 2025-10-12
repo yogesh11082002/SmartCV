@@ -1,0 +1,64 @@
+{
+  "placeholderImages": [
+    {
+      "id": "ai-generation",
+      "description": "AI generating a resume",
+      "imageUrl": "https://picsum.photos/seed/ai-gen/1080/810",
+      "imageHint": "abstract technology"
+    },
+    {
+      "id": "templates",
+      "description": "Various resume templates",
+      "imageUrl": "https://picsum.photos/seed/templates/1080/810",
+      "imageHint": "document layout"
+    },
+    {
+      "id": "editor",
+      "description": "A rich text editor interface",
+      "imageUrl": "https://picsum.photos/seed/editor/1080/810",
+      "imageHint": "computer screen"
+    },
+    {
+      "id": "user-avatar",
+      "description": "User avatar placeholder",
+      "imageUrl": "https://picsum.photos/seed/cartoon-avatar/200/200",
+      "imageHint": "person cartoon"
+    },
+    {
+      "id": "resume-thumb-1",
+      "description": "Resume template thumbnail 1",
+      "imageUrl": "https://picsum.photos/seed/resume1/400/565",
+      "imageHint": "resume document"
+    },
+    {
+      "id": "resume-thumb-2",
+      "description": "Resume template thumbnail 2",
+      "imageUrl": "https://picsum.photos/seed/resume2/400/565",
+      "imageHint": "resume document"
+    },
+    {
+      "id": "resume-thumb-3",
+      "description": "Resume template thumbnail 3",
+      "imageUrl": "https://picsum.photos/seed/resume3/400/565",
+      "imageHint": "resume document"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Testimonial user 1",
+      "imageUrl": "https://picsum.photos/seed/person1/100/100",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Testimonial user 2",
+      "imageUrl": "https://picsum.photos/seed/person2/100/100",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "testimonial-3",
+      "description": "Testimonial user 3",
+      "imageUrl": "https://picsum.photos/seed/person3/100/100",
+      "imageHint": "woman portrait"
+    }
+  ]
+}

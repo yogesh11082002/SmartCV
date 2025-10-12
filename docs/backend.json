@@ -1,0 +1,157 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile within the SmartResume AI application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL of the user's profile picture.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "email"
+      ]
+    },
+    "Resume": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Resume",
+      "type": "object",
+      "description": "Represents a user's resume, with structured content.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the resume."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the resume."
+        },
+        "personalDetails": {
+          "type": "object",
+          "properties": {
+            "fullName": { "type": "string" },
+            "email": { "type": "string" },
+            "phoneNumber": { "type": "string" },
+            "address": { "type": "string" },
+            "linkedin": { "type": "string" }
+          }
+        },
+        "summary": {
+          "type": "string",
+          "description": "Professional summary."
+        },
+        "experience": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "jobTitle": { "type": "string" },
+              "company": { "type": "string" },
+              "startDate": { "type": "string" },
+              "endDate": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "education": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "institution": { "type": "string" },
+              "degree": { "type": "string" },
+              "graduationDate": { "type": "string" }
+            }
+          }
+        },
+        "skills": {
+          "type": "string",
+          "description": "Comma-separated list of skills."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "title"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous",
+      "google.com"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profiles, with access restricted to the user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user. This MUST match the Firebase Auth UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/resumes/{resumeId}",
+        "definition": {
+          "entityName": "Resume",
+          "schema": {
+            "$ref": "#/backend/entities/Resume"
+          },
+          "description": "Stores resumes for a specific user. Resumes are owned by the user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user (owner of the resume)."
+            },
+            {
+              "name": "resumeId",
+              "description": "The unique identifier for the resume."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

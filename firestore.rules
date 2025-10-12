@@ -1,0 +1,121 @@
+/**
+ * @description This ruleset enforces a strict user-ownership model for most data, with public read access to templates.
+ * All data is nested under /users/{userId}, ensuring that only the authenticated user can access their own data.
+ * Templates are stored in a separate top-level collection and are publicly readable.
+ * Key Security Decisions:
+ *   - User data (profiles, resumes, AI drafts, settings) is strictly controlled by user ID.
+ *   - Templates are read-only for clients.
+ *   - Listing operations are secured to only allow users to list their own resources.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows a user to read and write their own profile data.
+     * @path /users/{userId}
+     * @allow (create, get, update, delete, list) if request.auth.uid == userId
+     * @deny (create, get, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false; //Prevent user enumeration.
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    /**
+     * @description Allows a user to manage their own resumes.
+     * @path /users/{userId}/resumes/{resumeId}
+     * @allow (create, get, update, delete, list) if request.auth.uid == userId
+     * @deny (create, get, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/resumes/{resumeId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if request.auth.uid == userId;
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    /**
+     * @description Allows a user to manage AI drafts associated with their resumes.
+     * @path /users/{userId}/resumes/{resumeId}/aiDrafts/{aiDraftId}
+     * @allow (create, get, update, delete, list) if request.auth.uid == userId
+     * @deny (create, get, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/resumes/{resumeId}/aiDrafts/{aiDraftId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if request.auth.uid == userId;
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    /**
+     * @description Allows anyone to read template data, but restricts creation, updates, and deletion.
+     * @path /templates/{templateId}
+     * @allow (get, list) if true
+     * @deny (create, update, delete) always
+     * @principle Public read, owner-only write.
+     */
+    match /templates/{templateId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Allows a user to manage their settings.
+     * @path /users/{userId}/settings/{settingsId}
+     * @allow (create, get, update, delete, list) if request.auth.uid == userId
+     * @deny (create, get, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId}/settings/{settingsId} {
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false; // Settings are not generally listable.
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+  }
+}
