@@ -12,10 +12,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'SmartCV – Build Your Professional Resume with AI',
+  title: 'AI Resume Builder',
   description:
-    'Create a standout resume in minutes with SmartCV. Our AI-powered platform helps you generate, enhance, and tailor your resume for your dream job.',
-  keywords: ['AI resume builder', 'resume generator', 'smart resume', 'CV builder', 'Next.js', 'Firebase', 'SmartCV'],
+    'Create a standout resume in minutes with our AI-powered platform that helps you generate, enhance, and tailor your resume for your dream job.',
+  keywords: ['AI resume builder', 'resume generator', 'smart resume', 'CV builder', 'Next.js', 'Firebase'],
 };
 
 export default function RootLayout({

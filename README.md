@@ -1,1 +1,1 @@
-My  Resume Builder Project.
+AI Resume Builder
