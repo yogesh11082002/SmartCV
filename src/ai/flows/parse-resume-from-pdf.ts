@@ -39,7 +39,7 @@ const EducationSchema = z.object({
 const ProjectSchema = z.object({
     name: z.string().describe("The name of the project."),
     description: z.string().describe("A brief description of the project."),
-    url: z.string().url("A valid URL for the project.").or(z.literal("")).optional(),
+    url: z.string().describe("A valid URL for the project.").optional(),
 });
 
 // Input and Output Schemas for the flow
