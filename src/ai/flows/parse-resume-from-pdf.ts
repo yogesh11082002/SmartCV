@@ -63,7 +63,7 @@ export type ParseResumeFromPdfOutput = z.infer<typeof ParseResumeFromPdfOutputSc
 const parseResumePrompt = ai.definePrompt({
   name: 'parseResumePrompt',
   input: { schema: ParseResumeFromPdfInputSchema },
-  output: { schema: ParseResumeFromPdsfOutputSchema },
+  output: { schema: ParseResumeFromPdfOutputSchema },
   model: 'googleai/gemini-2.5-pro',
   prompt: `You are an expert resume parser. Analyze the following resume document and extract the information into a structured JSON format. Be as accurate as possible. Extract all sections including personal details (name, email, phone, address, linkedin), summary, work experience, education, projects, and skills. For dates, standardize them to 'YYYY-MM-DD' or 'YYYY-MM' format where appropriate.
 
