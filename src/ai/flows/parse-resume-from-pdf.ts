@@ -39,7 +39,7 @@ const EducationSchema = z.object({
 const ProjectSchema = z.object({
     name: z.string().optional().describe("The name of the project."),
     description: z.string().optional().describe("A brief description of the project."),
-    url: z.string().url("A valid URL for the project.").optional().or(z.literal('')),
+    url: z.string().url("A valid URL for the project.").optional(),
 });
 
 // Input and Output Schemas for the flow
@@ -63,7 +63,7 @@ export type ParseResumeFromPdfOutput = z.infer<typeof ParseResumeFromPdfOutputSc
 const parseResumePrompt = ai.definePrompt({
   name: 'parseResumePrompt',
   input: { schema: ParseResumeFromPdfInputSchema },
-  output: { schema: ParseResumeFromPdfOutputSchema },
+  output: { schema: ParseResumeFromPdsfOutputSchema },
   model: 'googleai/gemini-2.5-pro',
   prompt: `You are an expert resume parser. Analyze the following resume document and extract the information into a structured JSON format. Be as accurate as possible. Extract all sections including personal details (name, email, phone, address, linkedin), summary, work experience, education, projects, and skills. For dates, standardize them to 'YYYY-MM-DD' or 'YYYY-MM' format where appropriate.
 
