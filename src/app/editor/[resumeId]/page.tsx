@@ -50,7 +50,7 @@ const educationSchema = z.object({
 const projectSchema = z.object({
     name: z.string().min(1, "Project name is required"),
     description: z.string().min(1, "Description is required"),
-    url: z.string().url("Please enter a valid URL").optional().or(z.literal('')),
+    url: z.string().url("Please enter a valid URL").optional(),
 });
 
 const resumeSchema = z.object({
@@ -102,6 +102,26 @@ const themes: { id: Theme, name: string, color: string }[] = [
     { id: 'amber', name: 'Amber', color: 'hsl(35 90% 55%)' },
     { id: 'violet', name: 'Violet', color: 'hsl(270 70% 60%)' },
 ];
+
+// Helper function to convert undefined to null
+function sanitizeDataForFirebase(data: any): any {
+  if (data === undefined) {
+    return null;
+  }
+  if (Array.isArray(data)) {
+    return data.map(item => sanitizeDataForFirebase(item));
+  }
+  if (typeof data === 'object' && data !== null && !(data instanceof Date)) {
+    const sanitizedObject: { [key: string]: any } = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        sanitizedObject[key] = sanitizeDataForFirebase(data[key]);
+      }
+    }
+    return sanitizedObject;
+  }
+  return data;
+}
 
 
 export default function EditorPage() {
@@ -254,11 +274,13 @@ export default function EditorPage() {
   async function onSubmit(data: ResumeFormValues) {
     if (!firestore || !user) return
     setIsSaving(true)
+    
+    const sanitizedData = sanitizeDataForFirebase(data);
 
     try {
       if (isNew) {
         const newResumeRef = await addDoc(collection(firestore, `users/${user.uid}/resumes`), {
-          ...data,
+          ...sanitizedData,
           userId: user.uid,
           createdAt: serverTimestamp(),
           lastModified: serverTimestamp(),
@@ -267,7 +289,7 @@ export default function EditorPage() {
         router.replace(`/editor/${newResumeRef.id}`)
       } else {
         await updateDoc(resumeDocRef!, {
-          ...data,
+          ...sanitizedData,
           lastModified: serverTimestamp(),
         })
         toast({ title: "Resume updated!", description: "Your changes have been saved." })
@@ -1664,3 +1686,6 @@ function AcademicTemplatePreview({ watchedForm }: { watchedForm: ResumeFormValue
 
     
 
+
+
+    
