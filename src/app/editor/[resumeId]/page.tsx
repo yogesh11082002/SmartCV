@@ -196,9 +196,14 @@ export default function EditorPage() {
                     graduationDate: edu.graduationDate ? parseISO(edu.graduationDate) : new Date(),
                   })),
                   skills: parsedData.skills,
-                  projects: [],
+                  projects: parsedData.projects?.map(proj => ({
+                      ...proj,
+                      name: proj.name || '',
+                      description: proj.description || '',
+                      url: proj.url || '',
+                  })) || [],
                 };
-                form.reset(dataToReset);
+                form.reset(dataToReset as ResumeFormValues);
                 sessionStorage.removeItem('new-resume-data');
                 // Clean the URL
                 router.replace('/editor/new', { scroll: false });

@@ -36,6 +36,12 @@ const EducationSchema = z.object({
   graduationDate: z.string().optional().describe("The graduation date in 'YYYY-MM' format."),
 });
 
+const ProjectSchema = z.object({
+    name: z.string().optional().describe("The name of the project."),
+    description: z.string().optional().describe("A brief description of the project."),
+    url: z.string().url("A valid URL for the project.").optional().or(z.literal('')),
+});
+
 // Input and Output Schemas for the flow
 const ParseResumeFromPdfInputSchema = z.object({
   pdfDataUri: z.string().describe("A PDF file encoded as a data URI."),
@@ -47,6 +53,7 @@ const ParseResumeFromPdfOutputSchema = z.object({
   summary: z.string().optional().describe('The professional summary or objective.'),
   experience: z.array(ExperienceSchema).optional().describe('A list of work experiences.'),
   education: z.array(EducationSchema).optional().describe('A list of educational qualifications.'),
+  projects: z.array(ProjectSchema).optional().describe('A list of projects.'),
   skills: z.string().optional().describe('A comma-separated list of skills.'),
 });
 export type ParseResumeFromPdfOutput = z.infer<typeof ParseResumeFromPdfOutputSchema>;
@@ -58,7 +65,7 @@ const parseResumePrompt = ai.definePrompt({
   input: { schema: ParseResumeFromPdfInputSchema },
   output: { schema: ParseResumeFromPdfOutputSchema },
   model: 'googleai/gemini-2.5-pro',
-  prompt: `You are an expert resume parser. Analyze the following resume document and extract the information into a structured JSON format. Be as accurate as possible. For dates, standardize them to 'YYYY-MM-DD' or 'YYYY-MM' format where appropriate.
+  prompt: `You are an expert resume parser. Analyze the following resume document and extract the information into a structured JSON format. Be as accurate as possible. Extract all sections including personal details (name, email, phone, address, linkedin), summary, work experience, education, projects, and skills. For dates, standardize them to 'YYYY-MM-DD' or 'YYYY-MM' format where appropriate.
 
 Resume Document:
 {{media url=pdfDataUri}}
