@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { useEffect, useState, useRef } from "react"
@@ -1662,3 +1663,4 @@ function AcademicTemplatePreview({ watchedForm }: { watchedForm: ResumeFormValue
     
 
     
+
