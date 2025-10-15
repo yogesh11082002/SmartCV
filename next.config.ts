@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-        bodySizeLimit: '2mb',
+        bodySizeLimit: '4mb',
     },
     // This increases the timeout for all serverless functions
     // Note: Vercel Hobby plan has a max of 10s, Pro has 60s. Adjust accordingly.
